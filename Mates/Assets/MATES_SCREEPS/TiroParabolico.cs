@@ -1,5 +1,31 @@
 using UnityEngine;
 
+public class plano
+{
+   
+   public Vector2 pos;
+
+   public Vector2 _normal;
+
+   public Vector2 Offcet;
+
+
+    public plano()
+    {
+        pos = Vector2.zero;
+        _normal = new Vector2(0,1);
+        Offcet = Vector2.zero;
+    }
+
+    public plano(Vector2 pos, Vector2 normal, Vector2 offcet   )
+    {
+        this.pos = pos;
+        _normal = normal;
+        Offcet = offcet;
+    }
+}
+
+
 public class TiroParabolico : MonoBehaviour
 {
     [Header("Particle")]
@@ -15,21 +41,30 @@ public class TiroParabolico : MonoBehaviour
     public float TotalTime = 10;
     public float deltaTime = 0.01f;
     private float G = 9.8f;
-    private float VelicotatInicial;
+    [SerializeField] private float VelicotatInicial;
     public Vector2 ResistenciaDelAire;
     public float masa;
 
     public float Friccio;
+
+
+
+
+    [Header("ColisionElemento")]
+    [SerializeField] private float Elasticitat;
+     private plano _plano;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        VelicotatInicial = 10;
-        angle = 60;
         AngleVector = AngleInVector(angle);
 
        // Acceleration = new Vector2(0, -G);
         posicioActual = new Vector2(0,0);
         calculaFriccioEspai();
+
+        _plano = new plano();
     }
 
     private Vector2 AngleInVector(float angle)
@@ -71,7 +106,30 @@ public class TiroParabolico : MonoBehaviour
     void calculaFriccioEspai()
     {
         Acceleration.x = -Friccio * AngleVector.x;
-        Acceleration.y = -G * -Friccio * AngleVector.y;
+        Acceleration.y = -G  - Friccio * AngleVector.y;
+    }
+
+
+ 
+
+    private void BouncePlane(plano plano)
+    {
+        float oldDot = Vector2.Dot(transform.position, plano._normal);
+        float newDot = Vector2.Dot(posicioActual, plano._normal);
+
+
+        if (oldDot * newDot < 0) {
+            float velocutuDot = Vector2.Dot(AngleVector, plano._normal);
+            Vector2 reflectionVelocty = AngleVector - (1 + Elasticitat) * velocutuDot * _plano._normal;
+
+            float positionDot = Vector2.Dot(posicioActual, plano._normal);
+            Vector2 reflectionPosition = posicioActual - (1 + Elasticitat) * positionDot * _plano._normal;
+            reflectionPosition += 0.01f * _plano._normal;
+
+            AngleVector = reflectionVelocty;
+            posicioActual = reflectionPosition;
+        }
+
     }
 
     private void Update()
@@ -81,6 +139,9 @@ public class TiroParabolico : MonoBehaviour
             CalculoAngularEnElTemps();
             calculaFriccioEspai();
             //(posicioActual, AngleVector, CurrentTime) = EulerMethod(posicioActual, AngleVector, CurrentTime);
+
+            BouncePlane(_plano);
+
             transform.position = posicioActual;
         }
     }

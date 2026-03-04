@@ -780,7 +780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1205307942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -798,6 +798,7 @@ MonoBehaviour:
   frictionConstrein: 5
   TotalTime: 15.707964
   deltaTime: 0.001
+  prePosition: {x: 0, y: 0}
 --- !u!212 &1205307943
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -886,7 +887,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!96 &1587507942
 TrailRenderer:
   serializedVersion: 3
@@ -1076,12 +1077,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e8ac7a1aeb2b54b9053dd3c25a25ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 65
+  AngleVector: {x: 0, y: 0}
+  Acceleration: {x: 0, y: 0}
+  angle: 45
   TotalTime: 100
   deltaTime: 0.01
-  ResistenciaDelAire: {x: 0.03, y: 0}
+  VelicotatInicial: 10
+  ResistenciaDelAire: {x: 0, y: 0}
   masa: 1
-  Friccio: 0.8
+  Friccio: 0.1
+  Elasticitat: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
